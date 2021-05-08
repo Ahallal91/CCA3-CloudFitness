@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 register_bp = Blueprint(
     'register_bp', __name__,
@@ -9,4 +9,4 @@ register_bp = Blueprint(
 
 @register_bp.route('/register', methods=["GET", "POST"])
 def register():
-    pass
+    return render_template("register.html")
