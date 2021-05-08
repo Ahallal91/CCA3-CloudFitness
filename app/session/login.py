@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 login_bp = Blueprint(
     'login_bp', __name__,
@@ -9,4 +9,4 @@ login_bp = Blueprint(
 
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
-    pass
+    return render_template("login.html")
