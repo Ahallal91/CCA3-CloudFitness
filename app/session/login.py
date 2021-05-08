@@ -7,17 +7,20 @@ login_bp = Blueprint(
     static_folder='static'
 )
 
-secret_key = "6LdjNssaAAAAACf7R0kBGYlC1NqCHOaSpm44Pf_B"
-recaptcha_url = "https://www.google.com/recaptcha/api/siteverify"
+recaptcha_secret_key = "6LdjNssaAAAAACf7R0kBGYlC1NqCHOaSpm44Pf_B"
 
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'GET':
         return render_template("login.html") 
     if request.method =='POST':
+        with open('app/config.json') as f:
+            data = json.load(f)
+        recaptcha_url = data.get('recaptcha-api', 'url')
+
         # verify with API
-        result = requests.post(recaptcha_url, data={
-            'secret': secret_key,
+        result = requests.post(recaptcha_url['url'], data={
+            'secret': recaptcha_secret_key,
             'response': request.form['g-recaptcha-response'],
             'remoteip': request.remote_addr,
         }).content

@@ -1,33 +1,35 @@
 {% extends "layout.html" %} {% block title %}Login{% endblock %} {% block content %}
+<div class="w-25 p-3 container-sm">
 <form method="POST">
-  <div class="center-box with-shadow">
-    <header class="form-header">
-      <h2>Login</h2>
+    <header class="mx-10">
+      <h2 class="display-4">Login</h2>
       {{ macros.print_flash_messages() }}
-      <p>Enter your ID and password below</p>
     </header>
-    <div class="login-fields">
-      <ul class="no-bullet">
-        <li><input name="email" class="input-field" type="text" placeholder="Email" required /></li>
-        <li>
-          <input
-            name="password"
-            class="input-field"
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </li>
-        <div class="g-recaptcha" data-sitekey="6LdjNssaAAAAAJ1Rcuu80p-mTpExNkIOAHqs_L20"></div>
-        </button>
-        <li><button type="submit" class="login-button">Log in</button></li>
-      </ul>
-      <p style="margin: 0 auto">
-        Don't have an account? <a href="{{ url_for('register_bp.register')}}">Sign up!</a>
-      </p>
+    <div class="mb-3">
+      <label class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" placeholder="Email" required>
     </div>
+    <div class="mb-3">
+      <label class="form-label">Email address</label>
+      <input type="password" class="form-control" id="password" placeholder="Password" required>
+    </div>
+    <div class="mb-3">
+    <div class="g-recaptcha" data-sitekey="6LdjNssaAAAAAJ1Rcuu80p-mTpExNkIOAHqs_L20"></div>
+    </button>
   </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary mb-3">Log in</button>
+  </div>
+  <div class="mb-3 row g-3">
+    <div class="col-auto">
+      <label for="staticEmail2">Don't have an account?</label>
+    </div>
+    <div class="col-auto">
+        <a href="{{ url_for('register_bp.register')}}">Sign up!</a>
+    </div>
+    </div>
 </form>
+</div>
 
 <script>
   function onSubmit(token) {

@@ -1,0 +1,10 @@
+{
+  "recaptcha-api": {
+    "url": "https://www.google.com/recaptcha/api/siteverify"
+  },
+  "cognito": {
+    "REGION": "ap-southeast-2",
+    "USER_POOL_ID": "ap-southeast-2_nNzqp63yX",
+    "APP_CLIENT_ID": "576ngbmbcef2gmljopga4a7qak"
+  }
+}
