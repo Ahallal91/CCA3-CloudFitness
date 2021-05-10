@@ -1,0 +1,23 @@
+{% extends "layout.html" %} {% block title %}Register{% endblock %} {% block content %}
+<div class="w-25 p-3 container-sm">
+<form method="POST" action="/confirm/register">
+    <header class="mx-10">
+      <h2 class="display-4">Confirm Register</h2>
+      {{ macros.print_flash_messages() }}
+    </header>
+    <div class="mb-3">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="Email" >
+      </div>
+    <div class="mb-3">
+      <label class="form-label">Confirmation Code</label>
+      <input type="confirm" class="form-control" id="confirm" placeholder="Confirmation Code" >
+    </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary mb-3">Register</button>
+  </div>
+    </div>
+</form>
+</div>
+</div>
+{% endblock content %}

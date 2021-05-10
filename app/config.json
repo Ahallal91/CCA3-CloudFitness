@@ -1,10 +1,12 @@
 {
   "recaptcha-api": {
+    "secret-key": "6LdjNssaAAAAACf7R0kBGYlC1NqCHOaSpm44Pf_B",
     "url": "https://www.google.com/recaptcha/api/siteverify"
   },
   "cognito": {
     "REGION": "ap-southeast-2",
     "USER_POOL_ID": "ap-southeast-2_nNzqp63yX",
-    "APP_CLIENT_ID": "576ngbmbcef2gmljopga4a7qak"
+    "APP_CLIENT_ID": "576ngbmbcef2gmljopga4a7qak",
+    "APP_CLIENT_SECRET": "1nrrof2igq86oqs9uiehb8guvlfqe423t2af1r4qkkfjjho2aohu"
   }
 }

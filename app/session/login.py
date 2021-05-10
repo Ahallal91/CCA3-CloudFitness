@@ -7,25 +7,26 @@ login_bp = Blueprint(
     static_folder='static'
 )
 
-recaptcha_secret_key = "6LdjNssaAAAAACf7R0kBGYlC1NqCHOaSpm44Pf_B"
+def verify_api(captcha):
+    with open('app/config.json') as f:
+                data = json.load(f)
+    recaptcha_data = data.get('recaptcha-api')
+    # verify with API
+    result = requests.post(recaptcha_data['url'], data={
+        'secret': recaptcha_data['secret-key'],
+        'response': captcha,
+        'remoteip': request.remote_addr,
+    }).content
+    result = json.loads(result)
+
+    return result.get('success', None)
 
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'GET':
         return render_template("login.html") 
     if request.method =='POST':
-        with open('app/config.json') as f:
-            data = json.load(f)
-        recaptcha_url = data.get('recaptcha-api', 'url')
-
-        # verify with API
-        result = requests.post(recaptcha_url['url'], data={
-            'secret': recaptcha_secret_key,
-            'response': request.form['g-recaptcha-response'],
-            'remoteip': request.remote_addr,
-        }).content
-        result = json.loads(result)
-        success = result.get('success', None)
+        success = verify_api(request.form['g-recaptcha-response'])
 
         if success:
             flash('You have logged in')
