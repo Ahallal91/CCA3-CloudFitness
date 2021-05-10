@@ -1,11 +1,26 @@
-import requests, json
-from flask import Blueprint, render_template, request, flash
+import requests
+import json
+import boto3
+import bcrypt
+from flask import Blueprint, render_template, request, flash, session
 
 login_bp = Blueprint(
     'login_bp', __name__,
     template_folder='templates',
     static_folder='static'
 )
+
+encoding = 'utf-8'
+
+def get_login(email):
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+    table = dynamodb.Table('user')
+    response = table.get_item(Key={'email': email})
+
+    if 'Item' in response:
+        return response['Item']
+    else:
+        return None
 
 def verify_api(captcha):
     with open('app/config.json') as f:
@@ -21,15 +36,36 @@ def verify_api(captcha):
 
     return result.get('success', None)
 
+def validate_captcha(captcha):
+    success = verify_api(captcha)
+    if success:
+        return None
+    else:
+        return 'reCaptcha unsuccessful'
+
+def validate_password(password, email):
+    if email is not None:
+        if bcrypt.checkpw(password, email['password'].encode(encoding)):
+            return None
+    return 'Username or password incorrect'
+
+def set_session_id(email, username):
+    session['email'] = email
+    session['username'] = username
+
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'GET':
         return render_template("login.html") 
     if request.method =='POST':
-        success = verify_api(request.form['g-recaptcha-response'])
-
-        if success:
-            flash('You have logged in')
+        captcha = validate_captcha(request.form['g-recaptcha-response'])
+        email = get_login(request.form['email'])
+        password = request.form['password'].encode(encoding)
+        password_valid = validate_password(password, email)
+        if captcha is not None:
+            flash(captcha)
+        if password_valid is not None:
+            flash(password_valid)
             return render_template("login.html")
         else:
             flash('reCaptcha unsuccessful')

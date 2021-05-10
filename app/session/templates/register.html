@@ -1,25 +1,26 @@
 {% extends "layout.html" %} {% block title %}Register{% endblock %} {% block content %}
 <div class="w-25 p-3 container-sm">
-<form method="POST" action="/register">
-    <header class="mx-10">
-      <h2 class="display-4">Register</h2>
-      {{ macros.print_flash_messages() }}
-    </header>
+  <header class="mx-10">
+    <h2 class="display-4">Register</h2>
+    {{ macros.print_flash_messages() }}
+  </header>
+<form action="/register" method="POST">
     <div class="mb-3">
       <label class="form-label">Email address</label>
-      <input type="email" class="form-control" id="email" placeholder="Email" >
+      <input type="email" name="email" class="form-control" id="email" placeholder="Email" required />
     </div>
     <div class="mb-3">
     <label class="form-label">Password</label>
-    <input type="password" class="form-control" id="password" placeholder="Password" >
+    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required />
     </div>
     <div class="mb-3">
     <label class="form-label">Password Confirmation</label>
-    <input type="password-confirmation" class="form-control" id="password-confirmation" placeholder="Password Confirmation" >
+    <input type="password" name="password-confirmation" class="form-control" id="password-confirmation" placeholder="Password Confirmation" required />
     </div>
   <div class="mb-3">
     <button type="submit" class="btn btn-primary mb-3">Register</button>
   </div>
+</form>
   <div class="mb-3 row g-3">
     <div class="col-auto">
       <label for="staticEmail2">Have an account?</label>
@@ -28,7 +29,6 @@
         <a href="{{ url_for('login_bp.login')}}">Log in!</a>
     </div>
     </div>
-</form>
 </div>
 </div>
 {% endblock content %}

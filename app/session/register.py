@@ -1,10 +1,6 @@
-import json
+import bcrypt
 import boto3
-import hmac
-import hashlib
-import base64
-from flask import Blueprint, render_template, request
-
+from flask import Blueprint, render_template, request, redirect, flash, url_for
 
 register_bp = Blueprint(
     'register_bp', __name__,
@@ -12,45 +8,33 @@ register_bp = Blueprint(
     static_folder='static'
 )
 
-with open('app/config.json') as f:
-    data = json.load(f)
-cognito = data.get('cognito')
-client = boto3.client('cognito-idp', region_name=cognito['REGION'])
-user_pool_id = cognito['USER_POOL_ID']
-client_id = cognito['APP_CLIENT_ID']
-client_secret = cognito['APP_CLIENT_SECRET']
+encoding = 'utf-8'
 
-def secret_hash(username):
-    message = username + client_id    
-    dig = hmac.new(bytearray(client_secret, "utf-8"), msg=message.encode('UTF-8'),
-                    digestmod=hashlib.sha256).digest()
-    return base64.b64encode(dig).decode()
+def validate_user(email, password, password_confirmation):
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+    table = dynamodb.Table('user')
+    existing_user = table.get_item(Key={'email': email})
+    if 'Item' in existing_user:
+        return 'User Exists'
+    if (password != password_confirmation):
+        return 'Passwords must match'
 
-def register_cognito(username, email, password):
-    response = client.sign_up(
-        ClientId=client_id,
-        SecretHash=secret_hash(username),
-        Username=username,
-        Password=password,
-        UserAttributes=[ 
-            { 
-                "Name": "email",
-                "Value": email
-            },
-            {
-                "Name": "preferred_username",
-                "Value": "email"
-            }
-        ],
+    return None
+
+def hash_password(password):
+    return bcrypt.hashpw(password, bcrypt.gensalt())
+
+def register_user(email, password):
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+    table = dynamodb.Table('user')
+
+    response = table.put_item(
+        Item={
+            'email': email,
+            'password': hash_password(password).decode(encoding)
+        }
     )
-    return response
 
-def confirm_cognito(username, confirm_code):
-    response = client.sign_up(
-        ClientId=client_id,
-        Username=username,
-        ConfirmationCode=confirm_code
-    )
     return response
 
 @register_bp.route('/register', methods=["GET", "POST"])
@@ -58,21 +42,14 @@ def register():
     if request.method == 'GET':
         return render_template("register.html")
     if request.method == 'POST':
-        # email = request.form['email']
-        # password = request.form['password']
-        username1 = 'testuser2'
-        email2 = username1
-        password1 = "#Abc1234"
-        success = register_cognito(email2, username1, password1)
-        return render_template("confirm_register.html")
-
-@register_bp.route('/confirm/register', methods=["GET", "POST"])
-def confirm_register():
-    if request.method == 'GET':
-        return render_template("confirm_register.html")
-    if request.method == 'POST':
         email = request.form['email']
-        code = request.form['confirm']
-        success = confirm_cognito(email, code)
-        print(success)
-        return render_template("confirm_register.html")
+        password = request.form['password'].encode(encoding)
+        password_confirm = request.form['password-confirmation'].encode(encoding)
+        validation = validate_user(email, password, password_confirm)
+        if validation is not None:
+            flash(validation)
+            return render_template("register.html")
+
+        register_user(email, password)
+        return redirect(url_for('login_bp.login'))
+
