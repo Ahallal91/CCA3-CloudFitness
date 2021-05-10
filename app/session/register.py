@@ -49,7 +49,7 @@ def register():
         if validation is not None:
             flash(validation)
             return render_template("register.html")
-
-        register_user(email, password)
-        return redirect(url_for('login_bp.login'))
+        else:
+            register_user(email, password)
+            return redirect(url_for('login_bp.login'))
 
