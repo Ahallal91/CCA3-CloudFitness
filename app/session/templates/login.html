@@ -19,6 +19,20 @@
     <div class="mb-3 mt-3">
       <button type="submit" class="btn btn-primary mb-3">Log in</button>
     </div>
+  </form>
+  <div class="mb-3 row g-3">
+    <div class="col-auto">
+      <label for="staticEmail2">Twitter Login</label>
+    </div>
+    <div class="col-auto">
+      <a href="{{ url_for('login_bp.twitter_login')}}">Sign in!</a>
+    </div>
+    
+<fb:login-button 
+scope="public_profile,email"
+onlogin="checkLoginState();">
+</fb:login-button>
+  </div>
     <div class="mb-3 row g-3">
       <div class="col-auto">
         <label for="staticEmail2">Don't have an account?</label>
@@ -27,7 +41,34 @@
         <a href="{{ url_for('register_bp.register')}}">Sign up!</a>
       </div>
     </div>
-  </form>
 </div>
 </div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '289401319489315',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v10.0'
+    });
+      
+    FB.AppEvents.logPageView();   
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+   
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+}
+</script>
 {% endblock content %}

@@ -2,8 +2,7 @@ import requests
 import json
 import boto3
 import bcrypt
-from flask_oauth import OAuth
-from flask import Blueprint, render_template, request, flash, session, url_for
+from flask import Blueprint, render_template, request, flash, session
 
 login_bp = Blueprint(
     'login_bp', __name__,
@@ -12,24 +11,10 @@ login_bp = Blueprint(
 )
 
 encoding = 'utf-8'
-oauth = OAuth()
 
-with open('app/config.json') as f:
+with open('app/data.json') as f:
     data = json.load(f)
-
-twitter = oauth.remote_app('twitter',
-    base_url='https://api.twitter.com/1/',
-    request_token_url='https://api.twitter.com/oauth/request_token',
-    access_token_url='https://api.twitter.com/oauth/access_token',
-    authorize_url='https://api.twitter.com/oauth/authenticate',
-    consumer_key=data.get('twitter-api')['API_KEY'],
-    consumer_secret=data.get('twitter-api')['API_SECRET']
-)
-
-@twitter.tokengetter
-def get_twitter_token(token=None):
-    return session.get('twitter_token')
-
+   
 def get_login(email):
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('user')
@@ -68,11 +53,6 @@ def validate_password(password, email):
 def set_session_id(email):
     session['email'] = email
 
-@login_bp.route("/twitter_login", methods=["GET", "POST"])
-def twitter_login():
-    return twitter.authorize(callback=url_for('oauth_authorized',
-    next=request.args.get('next') or request.referrer or None))
-    
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'GET':    
