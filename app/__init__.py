@@ -1,12 +1,10 @@
 from flask import Flask
-from datetime import timedelta
 
 def create_app():
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
     app.secret_key = "some_key"
-    app.permanent_session_lifetime = timedelta(minutes=5)
 
     from .home import home
     from .session import login
