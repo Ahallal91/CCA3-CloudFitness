@@ -2,7 +2,7 @@ import requests
 import json
 import boto3
 import bcrypt
-from flask import Blueprint, render_template, request, flash, session
+from flask import Blueprint, render_template, request, flash, session, redirect, url_for
 
 login_bp = Blueprint(
     'login_bp', __name__,
@@ -73,5 +73,6 @@ def login():
             return render_template("login.html")
         else:
             flash('Successfully logged in')
-            return render_template("login.html")
+            set_session_id(email)
+            return redirect(url_for('home_bp.home'))
 
