@@ -1,0 +1,19 @@
+{
+  "recaptcha-api": {
+    "secret-key": "6LdjNssaAAAAACf7R0kBGYlC1NqCHOaSpm44Pf_B",
+    "url": "https://www.google.com/recaptcha/api/siteverify"
+  },
+  "cognito": {
+    "REDIRECT_URI": "127.0.0.1:5000",
+    "DOMAIN_URL": "https://exerciseappa3.auth.ap-southeast-2.amazoncognito.com/",
+    "REGION": "ap-southeast-2",
+    "USER_POOL_ID": "ap-southeast-2_nNzqp63yX",
+    "APP_CLIENT_ID": "576ngbmbcef2gmljopga4a7qak",
+    "APP_CLIENT_SECRET": "1nrrof2igq86oqs9uiehb8guvlfqe423t2af1r4qkkfjjho2aohu"
+  },
+  "twitter-api": {
+    "API_KEY": "wNrUtWBS1s1gXQmSMwUtuublZ",
+    "API_SECRET": "66B1H1uOLxj4QGJQnno5VnI5oBJBk4tLa1NCMtyLfkesKojdZy",
+    "BEARER_TOKEN": "AAAAAAAAAAAAAAAAAAAAACO9PQEAAAAA0PfUbzHBLbU88vX87jBWRr5eYFY%3DIpfFPquzwTRk8Z7Hf2PldVv3vBnnWgZkXddFu3tKvV8MuzgC15"
+  }
+}

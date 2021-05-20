@@ -6,7 +6,10 @@ logout_bp = Blueprint(
     static_folder='static'
 )
 
+def remove_session_id():
+    session['email'] = None
 
 @logout_bp.route('/logout')
 def logout():
-    pass
+    remove_session_id()
+    return redirect(url_for('home_bp.home'))
