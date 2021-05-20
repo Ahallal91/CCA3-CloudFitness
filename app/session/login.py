@@ -55,6 +55,7 @@ def set_session_id(email):
 
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
+    session.pop('_flashes', None)
     if request.method == 'GET':    
         return render_template("login.html") 
     if request.method =='POST':
