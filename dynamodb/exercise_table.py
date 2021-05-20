@@ -4,7 +4,7 @@ def create_table():
     dynamodb = boto3.resource('dynamodb')
     try:
         table = dynamodb.create_table(
-            TableName='comments',
+            TableName='exercise',
             KeySchema=[
                 {
                     'AttributeName': 'id',
