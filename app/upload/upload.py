@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, session, url_for, request, flash, redirect
 import boto3
+import logging
 import uuid
+from botocore.exceptions import ClientError
 
 upload_bp = Blueprint(
     'upload_bp', __name__,
@@ -14,7 +16,7 @@ def format_tags(tags):
 def format_image_name(image):
     name = image.filename.split('.')
     name[0] = str(uuid.uuid1())
-    image.filename =  name[0] + name[1]
+    image.filename =  f"{name[0]}.{name[1]}"
     return image.filename
 
 def upload_exercise(filename, title, description, level, tags, url, admin_approved):
@@ -37,6 +39,15 @@ def upload_exercise(filename, title, description, level, tags, url, admin_approv
 
     return response
 
+def upload_exercise_image(file):
+    s3_client = boto3.client('s3')
+    bucket = 'elasticbeanstalk-ap-southeast-2-059411200951'
+    try:
+        s3_client.upload_fileobj(file, bucket, f"image_uploads/{file.filename}")
+    except ClientError as e:
+        logging.error(e)
+        return False
+    return True
 
 @upload_bp.route('/upload', methods=["GET", "POST"])
 def upload():
@@ -53,14 +64,15 @@ def upload():
             level = request.form['level_select']
             tags = request.form['tags']
             url = request.form['url']
-            image = request.files.get('image')
-
+            image = request.files['file']
             image.filename = format_image_name(image)
             tags = format_tags(tags)
 
-            response = upload_exercise(image.filename, title, description, level, tags, url, False)
-
-            flash(f'You have successfully uploaded {title} + {response}') 
+            if upload_exercise_image(image):
+                upload_exercise(image.filename, title, description, level, tags, url, False)
+                flash(f'You have successfully uploaded {title}')
+            else:
+                flash(f'An error occured uploading the file') 
             return render_template("upload.html", exercise_level=exercise_level)
 
             

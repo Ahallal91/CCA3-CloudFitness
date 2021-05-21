@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+import boto3
 
 home_bp = Blueprint(
     'home_bp', __name__,
