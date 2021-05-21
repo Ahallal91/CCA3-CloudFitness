@@ -1,6 +1,6 @@
-{% extends "layout.html" %}
-{% block content %}
-
-    Home page
-
-{%  endblock content %}
+{% extends "layout.html" %} {% block content %}
+<div class="w-25 p-3 container-sm">
+  <h2 class="display-4">Quote of Day</h2>
+  <p>{{ quote['q'] }} : {{ quote['a'] }}</p>
+</div>
+{% endblock content %}
