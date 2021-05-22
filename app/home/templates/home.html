@@ -1,6 +1,21 @@
 {% extends "layout.html" %} {% block content %}
-<div class="w-25 p-3 container-sm">
-  <h2 class="display-4">Quote of Day</h2>
-  <p>{{ quote['q'] }} : {{ quote['a'] }}</p>
+<div class="w-80 p-4 container">
+  <div>
+    <h3 class="display-7">Quote of Day</h3>
+    <span>
+      <p class="lead">'{{ quote['q'] }}' : {{ quote['a'] }}</p>
+    </span>
+  </div>
+
+  <div class="card-container">
+    <!-- LOOP -->
+    {% for item in exercise %}
+    <a href="/exercise/{{ item['id'] }}" class="card">
+      <h3>{{ item['title'] }}</h3>
+      <span>Author</span>
+      <span>Upload Date: {{ item['upload_date'] }}</span>
+    </a>
+    {% endfor %}
+  </div>
 </div>
 {% endblock content %}
