@@ -1,19 +1,30 @@
 {% extends "layout.html" %} {% block content %}
-<div class="w-80 p-4 container">
-  <div>
-    <h3 class="display-7">Quote of Day</h3>
-    <span>
-      <p class="lead">'{{ quote['q'] }}' : {{ quote['a'] }}</p>
-    </span>
+<div class="w-80 p-4 container landing-container">
+  <div class="qotd">
+    <div>
+      <h3 class="display-7">Quote of Day</h3>
+      <span>
+        <p class="lead">'{{ quote['q'] }}' : {{ quote['a'] }}</p>
+      </span>
+    </div>
   </div>
 
-  <div class="card-container">
-    <!-- LOOP -->
+  <div class="card__container">
     {% for item in exercise %}
-    <a href="/exercise/{{ item['id'] }}" class="card">
-      <h3>{{ item['title'] }}</h3>
-      <span>Author</span>
-      <span>Upload Date: {{ item['upload_date'] }}</span>
+    <a href="/exercise/{{ item['id'] }}" class="card__container-card">
+      <img
+        class="card__container-card-image"
+        src="https://source.unsplash.com/random"
+        alt="{{ item['title'] }}"
+      />
+      <div class="card__container-card-body">
+        <span class="card__container-card-title">{{ item['title'] }}</span>
+        <span class="card__container-card-author">Author</span>
+        <div class="card__container-card-data">
+          <span class="card__container-card-views">1000 views</span>
+          <span class="card__container-card-date">Upload Date: {{ item['upload_date'] }}</span>
+        </div>
+      </div>
     </a>
     {% endfor %}
   </div>
