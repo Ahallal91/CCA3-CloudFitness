@@ -1,0 +1,80 @@
+{% extends "layout.html" %} {% block content %}
+<div class="w-60 p-4 container">
+  {% for item in exercise %}
+
+  <div class="exercise__container">
+    <div class="video-container">
+      <iframe
+        class="video"
+        src="{{ item['url'] }}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <h3>{{ item['title'] }}</h3>
+    <span class="exercise__container-author">Author</span>
+    <div class="exercise__container-body">
+      <div class="exercise__container-data">
+        <span>{{ item['views']}} views</span>
+        <span class="exercise__container-data-date">Upload Date: {{ item['upload_date'] }}</span>
+      </div>
+    </div>
+    <form method="POST" action="/like">
+      <span>Like</span>
+      <input type="hidden" id="id" name="id" value="{{ item['id']}} " />
+      <button type="submit">
+        <i class="bi bi-hand-thumbs-up-fill"></i>
+      </button>
+    </form>
+
+    <p>{{ item['description'] }}</p>
+  </div>
+  {% endfor %}
+
+  <div class="comment__container">
+    <form method="POST" action="/comment">
+      <textarea id="message" name="message" placeholder="Enter comment..." rows="5"></textarea>
+      <button>Post</button>
+    </form>
+    <div class="comment__container-wrapper">
+      <!-- LOOP -->
+      <div class="comment__container-comments">
+        <p>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet, deserunt. Labore sit sunt
+          ipsum nostrum voluptatem quibusdam quod fuga eaque tenetur reiciendis! Fugit blanditiis
+          sit enim nemo aliquam aut pariatur.
+        </p>
+        <div class="exercise__container-data">
+          <span>Author</span>
+          <span class="exercise__container-data-date">Date</span>
+        </div>
+      </div>
+      <div class="comment__container-comments">
+        <p>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet, deserunt. Labore sit sunt
+          ipsum nostrum voluptatem quibusdam quod fuga eaque tenetur reiciendis! Fugit blanditiis
+          sit enim nemo aliquam aut pariatur.
+        </p>
+        <div class="exercise__container-data">
+          <span>Author</span>
+          <span class="exercise__container-data-date">Date</span>
+        </div>
+      </div>
+      <div class="comment__container-comments">
+        <p>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Amet, deserunt. Labore sit sunt
+          ipsum nostrum voluptatem quibusdam quod fuga eaque tenetur reiciendis! Fugit blanditiis
+          sit enim nemo aliquam aut pariatur.
+        </p>
+        <div class="exercise__container-data">
+          <span>Author</span>
+          <span class="exercise__container-data-date">Date</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

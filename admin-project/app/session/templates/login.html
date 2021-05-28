@@ -1,0 +1,67 @@
+{% extends "layout.html" %} {% block title %}Login{% endblock %} {% block content %}
+<div class="w-25 p-3 container-sm">
+  <form method="POST" action="/login">
+    <header class="mx-10">
+      <h2 class="display-4">Login</h2>
+      {{ macros.print_flash_messages() }}
+    </header>
+    <div class="mb-3">
+      <label class="form-label">Email address</label>
+      <input type="email" name="email" class="form-control" id="email" placeholder="Email" required />
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" id="password" placeholder="Password" required />
+    </div>
+    <div class="mb-3">
+      <div class="g-recaptcha" data-sitekey="6LdjNssaAAAAAJ1Rcuu80p-mTpExNkIOAHqs_L20"></div>
+
+    <div class="mb-3 mt-3">
+      <button type="submit" class="btn btn-primary mb-3">Log in</button>
+    </div>
+  </form>
+    
+<fb:login-button 
+scope="public_profile,email"
+onlogin="checkLoginState();">
+</fb:login-button>
+  </div>
+    <div class="mb-3 row g-3">
+      <div class="col-auto">
+        <label for="staticEmail2">Don't have an account?</label>
+      </div>
+      <div class="col-auto">
+        <a href="{{ url_for('register_bp.register')}}">Sign up!</a>
+      </div>
+    </div>
+</div>
+</div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '289401319489315',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v10.0'
+    });
+      
+    FB.AppEvents.logPageView();   
+      
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+   
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+}
+</script>
+{% endblock content %}
