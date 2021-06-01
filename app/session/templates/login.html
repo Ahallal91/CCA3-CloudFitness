@@ -80,7 +80,7 @@ function statusChangeCallback(response) {
       var dataReply = JSON.parse(this.responseText)
    }; // end
 
-   dataSend = {'facebook': 'true', 'userid': userID}
+   dataSend = JSON.stringify({'facebook': 'true', 'userid': userID});
    xml.send(dataSend);
  }
 </script>
