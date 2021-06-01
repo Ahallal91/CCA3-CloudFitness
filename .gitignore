@@ -140,3 +140,9 @@ cython_debug/
 # zip files
 *.zip
 
+# key files
+*.ppk
+*.pem
+
+# PyCharm folder
+.idea/
