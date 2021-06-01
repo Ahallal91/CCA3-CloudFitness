@@ -80,8 +80,10 @@ def login():
             set_session_id(email)
             return redirect(url_for('home_bp.home'))
 
-@login_bp.route("/facebook_login/<userid>", methods=["GET"])
+@login_bp.route("/facebook_login", methods=["POST"])
 def facebook_login(userid):
+    json_data = request.json
+    userid = json_data["userid"]
     if userid is None:
         flash('Facebook login error')
         return redirect(url_for('login_bp.login'))

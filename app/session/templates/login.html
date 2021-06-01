@@ -74,12 +74,22 @@ function statusChangeCallback(response) {
 
  function redirectUser(userID) {
   const url = new URL("/facebook_login", window.location.origin);
+  const data = { userid: userID };
 
-  url.searchParams.set("userid", userID);
-
-  return fetch(url, {
-      method: "get"
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
   })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
  }
 </script>
 {% endblock content %}
