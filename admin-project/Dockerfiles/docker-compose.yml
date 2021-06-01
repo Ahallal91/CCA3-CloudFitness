@@ -2,7 +2,7 @@ version: "3"
 
 services:
   adminproject:
-    build: ./cloudcomputinga3/admin-project/Dockerfiles
+    build: ./
     ports:
       - "5000:5000"
     network_mode: host
