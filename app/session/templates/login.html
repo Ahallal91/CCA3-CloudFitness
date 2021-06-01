@@ -20,7 +20,7 @@
       <button type="submit" class="btn btn-primary mb-3">Log in</button>
     </div>
   </form>
-    
+ 
 <fb:login-button 
 scope="public_profile,email"
 onlogin="checkLoginState();">
@@ -72,23 +72,18 @@ function statusChangeCallback(response) {
   }
  }; 
 
- function redirectUser(userID) {
-  const userid = new String(userID)
+ function redirectUser(id) {
+  const userID = new String(id)
   const url = new URL("/facebook_login", window.location.origin);
-  var data = {
-    userid  : userID
-  }
 
+  const data = {userid: userID};
+  console.log(JSON.stringify(data))
   fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
   })
   .catch((error) => {
     console.error('Error:', error);
