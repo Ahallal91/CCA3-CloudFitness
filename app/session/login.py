@@ -97,3 +97,4 @@ def facebook_login():
     else:
         # set session to user
         set_session_id(user)
+        return redirect(url_for('home_bp.home'))
