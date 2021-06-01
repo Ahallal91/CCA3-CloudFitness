@@ -26,6 +26,12 @@ def get_muscle_groups():
             "Glutes",
             "Quadriceps",
             "Hamstrings",
-            "Calves",
-            "Adductors",
-            "Abductors"]
+            "Calves"]
+
+
+def get_exercise_types():
+    return ["Compound",
+            "Free weight",
+            "Machine",
+            "Bodyweight",
+            "Cardio"]

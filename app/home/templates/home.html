@@ -11,14 +11,14 @@
 
   <div class="card__container">
     {% for item in exercise %}
-    <a href="/exercise/{{ item['id'] }}" class="card__container-card">
+    <a href="/exercise/{{ item['type'] }}/{{ item['name'] }}" class="card__container-card">
       <img
         class="card__container-card-image"
         src="https://source.unsplash.com/random"
         alt="{{ item['title'] }}"
       />
       <div class="card__container-card-body">
-        <span class="card__container-card-title">{{ item['title'] }}</span>
+        <span class="card__container-card-title">{{ item['name'] }}</span>
         <span class="card__container-card-author">Author</span>
         <div class="card__container-card-data">
           <span class="card__container-card-views">1000 views</span>

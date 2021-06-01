@@ -6,7 +6,7 @@
     <div class="video-container">
       <iframe
         class="video"
-        src="{{ item['url'] }}"
+        src="{{ item['video_url'] }}"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -14,7 +14,7 @@
       ></iframe>
     </div>
 
-    <h3>{{ item['title'] }}</h3>
+    <h3>{{ item['name'] }}</h3>
     <span class="exercise__container-author">Author</span>
     <div class="exercise__container-body">
       <div class="exercise__container-data">
