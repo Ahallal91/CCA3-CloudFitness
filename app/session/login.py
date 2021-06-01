@@ -94,7 +94,7 @@ def facebook_login():
         # register fb user with generated password
         password = str(uuid.uuid1())
         register_user(facebookid, password)
-    else:
-        # set session to user
-        set_session_id(user)
-        return redirect(url_for('home_bp.home'))
+
+    # set session to user
+    set_session_id(facebookid)
+    return redirect(url_for('home_bp.home'))
