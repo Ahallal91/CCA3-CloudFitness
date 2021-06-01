@@ -1,8 +1,10 @@
 import requests
 import json
+import uuid
 import boto3
 import bcrypt
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for
+from .app.session.register import register_user
 
 login_bp = Blueprint(
     'login_bp', __name__,
@@ -64,6 +66,7 @@ def login():
         email = get_login(request.form['email'])
         password = request.form['password'].encode(encoding)
         password_valid = validate_password(password, email)
+
         if captcha is not None:
             flash(captcha)
             error = True
@@ -77,3 +80,20 @@ def login():
             set_session_id(email)
             return redirect(url_for('home_bp.home'))
 
+@login_bp.route("/facebook_login", methods=["POST"])
+def facebook_login():
+    getPostData = request.get_json(force=True)
+
+    if getPostData is None:
+        flash('Facebook login error')
+        return redirect(url_for('login_bp.login'))
+    
+    facebookid = getPostData['userid']
+    user = get_login(facebookid)
+    if user is None:
+        # register fb user with generated password
+        password = str(uuid.uuid1())
+        register_user(facebookid, password)
+    else:
+        # set session to user
+        set_session_id(user)
