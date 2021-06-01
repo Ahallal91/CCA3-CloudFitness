@@ -85,9 +85,6 @@ def facebook_login():
     json_data = request.get_json(force=True)
 
     userid = json_data["userid"]
-    if userid is None:
-        flash('Facebook login error')
-        return redirect(url_for('login_bp.login'))
 
     user = get_login(userid)
     if user is None:
@@ -97,4 +94,5 @@ def facebook_login():
 
     # set session to user
     set_session_id(userid)
+
     return redirect(url_for('home_bp.home'))
