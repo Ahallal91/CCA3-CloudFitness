@@ -82,7 +82,7 @@ def login():
 
 @login_bp.route("/facebook_login", methods=["POST"])
 def facebook_login():
-    getPostData = request.get_json(force=True)
+    getPostData = request.json
 
     if getPostData is None:
         flash('Facebook login error')
