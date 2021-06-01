@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  adminproject:
+    build: ./admin-project/Dockerfiles
+    ports:
+      - "5000:5000"
+    network_mode: host
