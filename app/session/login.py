@@ -81,17 +81,18 @@ def login():
             return redirect(url_for('home_bp.home'))
 
 @login_bp.route("/facebook_login", methods=["POST"])
-def facebook_login(userid):
-    json_data = request.json
+def facebook_login():
+    json_data = request.get_json(force=True)
+
     userid = json_data["userid"]
     if userid is None:
         flash('Facebook login error')
         return redirect(url_for('login_bp.login'))
-    
+
     user = get_login(userid)
     if user is None:
         # register fb user with generated password
-        password = str(uuid.uuid1())
+        password = str(uuid.uuid1()).encode(encoding)
         register_user(userid, password)
 
     # set session to user
