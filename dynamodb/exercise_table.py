@@ -1,17 +1,24 @@
 import boto3
+from botocore.exceptions import ClientError
 
-def create_table():
+
+def create_table(dynamodb=None):
+    if not dynamodb:
+        dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-2")
+
+    table_name = 'exercise'
+
     dynamodb = boto3.resource('dynamodb')
     try:
         table = dynamodb.create_table(
-            TableName='exercise',
+            TableName=table_name,
             KeySchema=[
                 {
-                    'AttributeName': 'id',
-                    'KeyType': 'HASH'  
+                    'AttributeName': 'body_part',
+                    'KeyType': 'HASH'
                 },
                 {
-                    'AttributeName': 'title',
+                    'AttributeName': 'name',
                     'KeyType': 'RANGE'
                 }
             ],
@@ -30,9 +37,16 @@ def create_table():
                 'WriteCapacityUnits': 10
             }
         )
-    except:
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'ResourceInUseException':
+            print(f"Table {table_name} already exists")
+        elif e.response['Error']['Code'] == 'InternalServerError':
+            print("An unknown error occured on the server side. HTTP Status Code: 500")
         return None
+
+    table.wait_until_exists()
     return table
+
 
 if __name__ == '__main__':
     exercise_table = create_table()

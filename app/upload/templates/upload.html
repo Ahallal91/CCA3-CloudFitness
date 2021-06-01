@@ -10,6 +10,14 @@
       <input type="text" name="title" class="form-control" id="title" required />
     </div>
     <div class="mb-3">
+      <label class="form-label">Muscle group</label>
+      <select id="muscle_group" name="muscle_group" class="form-select">
+        {% for muscle in muscle_groups %}
+        <option value="{{ muscle }}">{{ muscle }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
       <label class="form-label">Description</label>
       <input type="text" name="description" class="form-control" id="description" required />
     </div>

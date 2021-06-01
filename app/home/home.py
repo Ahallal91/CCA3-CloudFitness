@@ -8,18 +8,22 @@ home_bp = Blueprint(
     static_folder='static'
 )
 
+
 def getRandomQuote():
     response = requests.get('https://zenquotes.io/api/random')
     return response.json()[0]
+
 
 def get_exercise_image(id, imagetype):
     url = f"https://elasticbeanstalk-ap-southeast-2-059411200951.s3-ap-southeast-2.amazonaws.com/image_uploads/{id}.{imagetype}"
     return url
 
+
 def getExercise():
     table = create_table_resource('exercise')
     response = table.scan()
     return response['Items']
+
 
 @home_bp.route('/', methods=["GET", "POST"])
 def home():
