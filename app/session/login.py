@@ -4,7 +4,7 @@ import uuid
 import boto3
 import bcrypt
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for
-from .app.session.register import register_user
+from .register import register_user
 
 login_bp = Blueprint(
     'login_bp', __name__,
