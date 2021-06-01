@@ -23,13 +23,14 @@ def upload():
 
     exercise_level = util.get_exercise_levels()
     muscle_groups = util.get_muscle_groups()
+    exercise_types = util.get_exercise_types()
 
     if request.method == 'POST':
-        title = request.form['title']
-        muscle_group = request.form['muscle_group']
-        description = request.form['description']
+        name = request.form['name'].replace(' ', '-').lower()
+        exercise_type = request.form['exercise_type'].replace(' ', '-').lower()
         level = request.form['level_select']
-        tags = request.form['tags']
+        muscles = request.form.getlist('muscles')
+        description = request.form['description']
         video_url = request.form['url']
         image = request.files['file']
 
@@ -37,10 +38,12 @@ def upload():
             bucket = "elasticbeanstalk-ap-southeast-2-059411200951"
             image_name = StorageDAO.upload_exercise_image(image, bucket)
             image_url = StorageDAO.get_url_for(bucket, "ap-southeast-2", "image_uploads/", image_name)
-            ExerciseDAO.upload_exercise(title, muscle_group, description, level, tags, image_url, video_url, False)
+            ExerciseDAO.upload_exercise(name, exercise_type, level, muscles, description, video_url, image_url, False)
+            flash(f'Exercise uploaded successfully!')
         except (ImageUploadFailed, ExerciseUploadFailed) as e:
             flash(f'{e.message}')
-        else:
-            flash(f'An unknown error occurred uploading your exercise.')
 
-    return render_template("upload.html", exercise_level=exercise_level, muscle_groups=muscle_groups)
+    return render_template("upload.html",
+                           exercise_level=exercise_level,
+                           muscle_groups=muscle_groups,
+                           exercise_types=exercise_types)

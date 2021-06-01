@@ -14,7 +14,7 @@ def create_table(dynamodb=None):
             TableName=table_name,
             KeySchema=[
                 {
-                    'AttributeName': 'body_part',
+                    'AttributeName': 'type',
                     'KeyType': 'HASH'
                 },
                 {
@@ -24,11 +24,11 @@ def create_table(dynamodb=None):
             ],
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'id',
+                    'AttributeName': 'type',
                     'AttributeType': 'S'
                 },
                 {
-                    'AttributeName': 'title',
+                    'AttributeName': 'name',
                     'AttributeType': 'S'
                 }
             ],
