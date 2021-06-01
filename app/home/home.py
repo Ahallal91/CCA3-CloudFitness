@@ -14,11 +14,6 @@ def getRandomQuote():
     return response.json()[0]
 
 
-def get_exercise_image(id, imagetype):
-    url = f"https://elasticbeanstalk-ap-southeast-2-059411200951.s3-ap-southeast-2.amazonaws.com/image_uploads/{id}.{imagetype}"
-    return url
-
-
 def getExercise():
     table = create_table_resource('exercise')
     response = table.scan()
@@ -30,6 +25,4 @@ def home():
     #quote = getRandomQuote()
     quote = {'q': 'test quote', 'a': 'test author'}
     exercise = getExercise()
-    for item in exercise:
-        item['image_url'] = get_exercise_image(item['id'], item['filetype'])
     return render_template("home.html", quote=quote, exercise=exercise)
