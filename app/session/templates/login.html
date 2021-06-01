@@ -75,7 +75,7 @@ function statusChangeCallback(response) {
  function redirectUser(userID) {
   const userid = new String(userID)
   const url = new URL("/facebook_login", window.location.origin);
-  const data = `{ "userid" : ${userid} }`
+  const data = `'{ "userid" : ${userid} }'`
 
   fetch(url, {
     method: 'POST',
