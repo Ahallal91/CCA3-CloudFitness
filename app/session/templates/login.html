@@ -65,7 +65,8 @@ function checkLoginState() {
 }
 
 function statusChangeCallback(response) {
-  if (response.status === 'connected') {
+  if (response.status === 'connected' ||
+      response.status === 'not_authorized' ) {
     redirectUser(response.authResponse['userID'])
   } else {
     FB.login()
@@ -77,7 +78,7 @@ function statusChangeCallback(response) {
   const url = new URL("/facebook_login", window.location.origin);
 
   const data = {userid: userID};
-  console.log(JSON.stringify(data))
+
   fetch(url, {
     method: 'POST',
     headers: {
