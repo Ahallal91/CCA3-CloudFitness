@@ -146,3 +146,4 @@ cython_debug/
 
 # PyCharm folder
 .idea/
+aws-envs.txt
