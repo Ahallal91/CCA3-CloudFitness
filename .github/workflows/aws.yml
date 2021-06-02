@@ -72,7 +72,7 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: aws-task-definition.json
+          task-definition: admin-project/aws-task-definition.json
           container-name: aws-ecs-clouda3
           image: ${{ steps.build-image.outputs.image }}
 
