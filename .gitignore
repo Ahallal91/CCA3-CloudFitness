@@ -140,3 +140,4 @@ cython_debug/
 # zip files
 *.zip
 
+aws-envs.txt
