@@ -1,11 +1,9 @@
 import boto3
-from functools import reduce
-from boto3.dynamodb.conditions import Key, And
-
+from boto3.dynamodb.conditions import Key
 class Management:
-    def get_exercise_by_approval(approval):
-        dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
-        table = dynamodb.Table('exercise')
+    table = boto3.resource('dynamodb', region_name='ap-southeast-2').Table('exercise')
+
+    def get_exercise_by_approval(self, approval):
         scan_kwargs = {
             'FilterExpression': Key('approved').eq(approval),
             'ProjectionExpression': "#t, #n, approved, description, image_url, #lvl, likes, muscle_groups, upload_date, video_url, #v",
@@ -17,7 +15,7 @@ class Management:
         while not done:
             if start_key:
                 scan_kwargs['ExclusiveStartKey'] = start_key
-            response = table.scan(**scan_kwargs)
+            response = self.table.scan(**scan_kwargs)
             display_exercises = (response.get('Items', []))
             start_key = response.get('LastEvaluatedKey', None)
             done = start_key is None
@@ -27,10 +25,8 @@ class Management:
         else:
             return None
     
-    def update_exercise_approval(type, name, approval):
-        dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
-        table = dynamodb.Table('exercise')
-        response = table.update_item(
+    def update_exercise_approval(self, type, name, approval):
+        response = self.table.update_item(
             Key={
                 'type': type,
                 'name': name
@@ -39,7 +35,16 @@ class Management:
             ExpressionAttributeValues={
                 ':a': approval
             },
-            ReturnValues=f"UPDATED_APPROVAL: {approval}"
+            ReturnValues=f"UPDATED_NEW"
         )
+
+        return response
+
+    def remove_exercise(self, type, name):
+        response = self.table.delete_item(
+            Key={
+                'type': type,
+                'name': name
+            })
 
         return response

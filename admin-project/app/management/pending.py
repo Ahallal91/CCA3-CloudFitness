@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from .management import Management as management
+from .management import Management as Management
 
 
 pending_bp = Blueprint(
@@ -7,6 +7,8 @@ pending_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
+
+management = Management()
 
 @pending_bp.route('/pending', methods=["GET", "POST"])
 def pending():
@@ -17,6 +19,9 @@ def pending():
         type = request.form['type']
         name = request.form['name']
         approval = request.form['approval']
-        management.update_exercise_approval(type, name, approval)
+        if approval == 'approved':
+            management.update_exercise_approval(type, name, True)
+        else:
+            management.remove_exercise(type, name)
         return render_template("pending.html", exercises=exercises)
 

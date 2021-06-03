@@ -7,6 +7,45 @@
     </div>
   </div>
 
+  <table  class="table table-striped table-bordered">
+    <thead class="thead-dark text-capitalize">
+      <tr>
+        {% for exercise in exercises %}
+          {% for key, value in exercise.items() %}
+          <td>{{ key }}</td>
+          {% endfor %}
+          <td>Pending</td>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for exercise in exercises %}
+    <tr style="word-wrap: break-word">
+        {% for key, value in exercise.items() %}
+        {% if key == 'image_url' %}
+        <td><img
+          class="mx-2"
+          height="100"
+          width="100"
+          src="{{ value }}"
+        /></td>
+        {% elif key == 'video_url' %}
+        <td style="max-width: 9rem"><a style="word-wrap: break-word" href="{{ value }}">{{ value }} </a></td>
+        {% else %}
+      <td>{{ value }}</td>
+        {% endif %}
+        {% endfor %}
+        <form action="/approved" method="POST">
+          <input type="hidden" id="type" name="type" value="{{ exercise['type'] }}" />
+          <input type="hidden" id="name" name="name" value="{{ exercise['name'] }}" />
+          <input type="hidden" id="pending" name="pending" value="pending" />
+        <td><button tyoe="submit" class="btn btn-success">Pending</button></td>
+        </form>
+    </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
   </div>
 </div>
 {% endblock content %}
