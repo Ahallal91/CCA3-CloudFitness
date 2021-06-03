@@ -10,10 +10,10 @@ login_bp = Blueprint(
 
 encoding = 'utf-8'
 
-def get_login(email):
+def get_login(user):
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('user')
-    response = table.get_item(Key={'email': email})
+    response = table.get_item(Key={'email': user})
 
     if 'Item' in response:
         return response['Item']
@@ -26,8 +26,8 @@ def validate_password(password, email):
             return None
     return 'Username or password incorrect'
 
-def set_session_id(email):
-    session['email'] = email
+def set_session_id(user):
+    session['user'] = user
 
 @login_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -36,9 +36,9 @@ def login():
         return render_template("login.html") 
     if request.method =='POST':
         error = False
-        email = get_login(request.form['email'])
+        user = get_login(request.form['user'])
         password = request.form['password'].encode(encoding)
-        password_valid = validate_password(password, email)
+        password_valid = validate_password(password, user)
         if password_valid is not None:
             flash(password_valid)
             error = True
@@ -46,6 +46,6 @@ def login():
             return render_template("login.html")
         else:
             flash('Successfully logged in')
-            set_session_id(email)
+            set_session_id(user)
             return redirect(url_for('home_bp.home'))
 

@@ -9,9 +9,13 @@ def create_app():
     from .home import home
     from .session import login
     from .session import logout
+    from .management import approved
+    from .management import pending
 
     app.register_blueprint(home.home_bp)
     app.register_blueprint(login.login_bp)
     app.register_blueprint(logout.logout_bp)
+    app.register_blueprint(pending.pending_bp)
+    app.register_blueprint(approved.approved_bp)
     
     return app

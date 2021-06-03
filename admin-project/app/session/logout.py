@@ -7,7 +7,7 @@ logout_bp = Blueprint(
 )
 
 def remove_session_id():
-    session['email'] = None
+    session['user'] = None
 
 @logout_bp.route('/logout')
 def logout():
