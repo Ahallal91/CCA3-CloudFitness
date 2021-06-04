@@ -27,9 +27,16 @@
     </div>
     <div class="mb-3 justify-content-center">
       <label class="form-label">Muscle groups (check all that apply)</label>
-      <div class="btn-group " role="group" aria-label="Upper body muscles" style="flex-wrap: wrap;">
+      <div class="btn-group" role="group" aria-label="Upper body muscles" style="flex-wrap: wrap">
         {% for muscle in muscle_groups %}
-        <input type="checkbox" class="btn-check" name="muscles" id="{{ muscle }}" value="{{ muscle }}" autocomplete="off">
+        <input
+          type="checkbox"
+          class="btn-check"
+          name="muscles"
+          id="{{ muscle }}"
+          value="{{ muscle }}"
+          autocomplete="off"
+        />
         <label class="btn btn-outline-primary float-left" for="{{ muscle }}">{{ muscle }}</label>
         {% endfor %}
       </div>
@@ -44,7 +51,7 @@
     </div>
     <div class="mb-3">
       <label class="form-label">Exercise Image (optional)</label>
-      <input type="file" name="file" class="form-control" id="file" />
+      <input type="file" name="file" class="form-control" id="file" required />
     </div>
     <div class="mb-3 mt-3">
       <button type="submit" class="btn btn-primary mb-3">Upload</button>

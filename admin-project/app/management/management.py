@@ -39,12 +39,3 @@ class Management:
         )
 
         return response
-
-    def remove_exercise(self, type, name):
-        response = self.table.delete_item(
-            Key={
-                'type': type,
-                'name': name
-            })
-
-        return response
