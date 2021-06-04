@@ -1,4 +1,5 @@
 import boto3
+from decimal import Decimal
 from datetime import datetime
 
 from boto3.dynamodb.conditions import Key
@@ -29,6 +30,33 @@ def upload_exercise(name, exercise_type, level, muscle_groups, description, vide
 
     return response
 
+def update_exercise(exercise_type, name, views=None, likes=None):
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+    table = dynamodb.Table('exercise')
+    increment = 1
+
+    if views is not None:
+        expression = "SET #a = #a + :val"
+        attribute = "views"
+    if likes is not None:
+        expression = "SET #a = #a + :val"
+        attribute = "likes"
+    response = table.update_item(
+        Key={
+            'type': exercise_type,
+            'name': name
+        },
+        UpdateExpression=expression,
+        ExpressionAttributeValues={
+            ':val':Decimal(increment)
+        },
+        ExpressionAttributeNames={
+            "#a": attribute
+        },
+        ReturnValues=f"UPDATED_NEW"
+    )
+
+    return response
 
 def get_exercise(exercise_type, name, dynamodb=None):
     if not dynamodb:
