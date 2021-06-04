@@ -248,6 +248,10 @@
   flex-wrap: wrap;
 }
 
+.comment__container-wrapper {
+  width: 100%;
+}
+
 .comment__container form {
   margin: 2rem 0;
   width: 100%;

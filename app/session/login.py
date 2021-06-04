@@ -63,9 +63,10 @@ def login():
     if request.method =='POST':
         error = False
         captcha = validate_captcha(request.form['g-recaptcha-response'])
-        email = get_login(request.form['email'])
+        user = get_login(request.form['email'])
+        email = user['email']
         password = request.form['password'].encode(encoding)
-        password_valid = validate_password(password, email)
+        password_valid = validate_password(password, user)
 
         if captcha is not None:
             flash(captcha)

@@ -4,24 +4,64 @@ from datetime import datetime
 from boto3.dynamodb.conditions import Key
 
 class CommentDAO:
-    table = boto3.resource('dynamodb', region_name='ap-southeast-2').Table('comment')
+    table = boto3.resource('dynamodb', region_name='ap-southeast-2').Table('comments')
+
+    def create_comment(self, exercise_type, email, comment):
+        response = self.table.put_item(
+            Item={
+                'type': exercise_type,
+                'email': email,
+                'comments': [
+                    {
+                        'timestamp': str(datetime.now()),
+                        'comment': comment
+                    }
+                ]
+            }
+        )
+
+        return response
+
+    def update_comment(self, exercise_type, email, comment):
+        response = self.table.update_item(
+            Key={
+                'type': exercise_type,
+                'email': email
+            },
+            UpdateExpression="SET comments = list_append(comments, :c)",
+            ExpressionAttributeValues={
+                ':c': [{'timestamp': str(datetime.now()),
+                        'comment' : comment}]
+            },
+            ReturnValues=f"UPDATED_NEW"
+        )
+
+        return response
     
-    def upload_exercise(name, exercise_type, level, muscle_groups, description, video_url, image_url, admin_approved):
+    def upload_comment(self, exercise_type, email, comment):
+        # check if the user already made a comment on that exercise
+        exercise_type = str(exercise_type)
+        email = str(email)
 
-    response = table.put_item(
-        Item={
-            'name': name,  # name of the exercise, e.g. "squat"
-            'type': exercise_type,  # type of exercise, e.g. compound, body weight, etc
-            'level': level,  # difficulty level, e.g. beginner, intermediate, etc.
-            'muscle_groups': muscle_groups,  # list of muscle groups, e.g. neck, triceps, biceps, etc.
-            'description': description,  # user-given description of that exercise
-            'video_url': video_url,  # video url
-            'image_url': image_url,
-            'approved': admin_approved,  # true if an admin has approved the workout, false otherwise
-            'upload_date': str(datetime.now()),  # upload date in the format YYYY-MM-DD HH:MM:SS.MS
-            'views': 0,  # number of times exercise has been viewed by all users
-            'likes': 0,  # number of likes exercise has received from registered users
-        }
-    )
+        response = self.table.query(
+            KeyConditionExpression=Key('type').eq(exercise_type) & Key('email').eq(email)
+        )
+        print(response)
+        if 'Items' in response and len(response['Items']) != 0:
+            print("exists")
+            self.update_comment(exercise_type, email, comment)
+        else:
+            print("added new")
+            self.create_comment(exercise_type, email, comment)
 
-    return response
+    def get_comments(self, exercise_type, email=None):
+        if email is None:
+            response = self.table.query(
+                KeyConditionExpression=Key('type').eq(exercise_type)
+            )
+        else:
+            response = self.table.query(
+                KeyConditionExpression=Key('type').eq(exercise_type) & Key('email').eq(email)
+            )
+
+        return response['Items']
