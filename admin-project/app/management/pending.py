@@ -12,7 +12,7 @@ management = Management()
 
 @pending_bp.route('/pending', methods=["GET", "POST"])
 def pending():
-    exercises = management.get_exercise_by_approval(False)
+    exercises = management.get_exercise_by_approval('False')
     if request.method == 'GET':
         return render_template("pending.html", exercises=exercises)
     if request.method == 'POST':
@@ -21,7 +21,6 @@ def pending():
         approval = request.form['approval']
         if approval == 'approved':
             management.update_exercise_approval(type, name, True)
-        else:
-            management.remove_exercise(type, name)
+
         return render_template("pending.html", exercises=exercises)
 

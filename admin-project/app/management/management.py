@@ -1,41 +1,22 @@
-import boto3
-from boto3.dynamodb.conditions import Key
+import requests
 class Management:
-    table = boto3.resource('dynamodb', region_name='ap-southeast-2').Table('exercise')
+    api = "https://api.cloudfitness.click/workouts"
+    key = "y6Ae5eqeM54tRx9AV1cSk9lGPmRwoDN46SEzPyHY"
 
     def get_exercise_by_approval(self, approval):
-        scan_kwargs = {
-            'FilterExpression': Key('approved').eq(approval),
-            'ProjectionExpression': "#t, #n, approved, description, image_url, #lvl, likes, muscle_groups, upload_date, video_url, #v",
-            'ExpressionAttributeNames': {"#t": "type", "#n": "name", "#lvl": "level", "#v": "views"}
-        }
-
-        done = False
-        start_key = None
-        while not done:
-            if start_key:
-                scan_kwargs['ExclusiveStartKey'] = start_key
-            response = self.table.scan(**scan_kwargs)
-            display_exercises = (response.get('Items', []))
-            start_key = response.get('LastEvaluatedKey', None)
-            done = start_key is None
-
-        if 'Items' in response:
-            return display_exercises
-        else:
-            return None
+        response = requests.get(f'{self.api}?approval={approval}')
+        return response.json()
+        
     
     def update_exercise_approval(self, type, name, approval):
-        response = self.table.update_item(
-            Key={
-                'type': type,
-                'name': name
-            },
-            UpdateExpression="set approved=:a",
-            ExpressionAttributeValues={
-                ':a': approval
-            },
-            ReturnValues=f"UPDATED_NEW"
+        headers = {'x-api-key': self.key }
+        response = requests.put(f'{self.api}', 
+                                headers=headers,
+                                params={
+                                    'approval' : approval,
+                                    'exercisetype': type,
+                                    'exercisename': name
+                                }
         )
-
-        return response
+        print(response.json())
+        return response.json()
