@@ -48,10 +48,8 @@ class CommentDAO:
         )
         print(response)
         if 'Items' in response and len(response['Items']) != 0:
-            print("exists")
             self.update_comment(exercise_type, email, comment)
         else:
-            print("added new")
             self.create_comment(exercise_type, email, comment)
 
     def get_comments(self, exercise_type, email=None):
