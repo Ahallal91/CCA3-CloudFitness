@@ -19,5 +19,4 @@ class Management:
                                     'exercisename': name
                                 }
         )
-        print(response.json())
         return response.json()
