@@ -39,6 +39,9 @@ def upload():
         formatted_name = request.form['name']
         sort_name = parse_name(formatted_name)
 
+        # duplicating sort key as an attribute to make table scannable
+        search = sort_name
+
         # TODO: need to enforce this
         # assuming videos are from youtube, replace the link given with the embed
         video_url = request.form['url']
@@ -55,7 +58,7 @@ def upload():
             image_name = StorageDAO.upload_exercise_image(image, bucket)
             image_url = StorageDAO.get_url_for(bucket, "ap-southeast-2", "image_uploads/", image_name)
             ExerciseDAO.upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name,
-                                        level, muscles, description, video_url, image_url, False)
+                                        search, level, muscles, description, video_url, image_url, False)
             flash(f'Exercise uploaded successfully!')
         except (ImageUploadFailed, ExerciseUploadFailed) as e:
             flash(f'{e.message}')
