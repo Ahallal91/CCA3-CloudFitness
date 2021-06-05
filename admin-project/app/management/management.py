@@ -1,8 +1,9 @@
 import requests
+import os
 class Management:
     api = "https://api.cloudfitness.click/workouts"
-    key = "y6Ae5eqeM54tRx9AV1cSk9lGPmRwoDN46SEzPyHY"
-
+    key = os.environ["API_GATEWAY_KEY"]
+    
     def get_exercise_by_approval(self, approval):
         response = requests.get(f'{self.api}?approval={approval}')
         return response.json()
