@@ -35,7 +35,13 @@
 
   <div class="comment__container">
     <form method="POST" action="/exercise/{{ exercise['type'] }}/{{ exercise['name'] }}">
-      <textarea id="message" name="message" placeholder="Enter comment..." rows="5"></textarea>
+      <textarea
+        id="message"
+        name="message"
+        placeholder="Enter comment..."
+        rows="5"
+        required
+      ></textarea>
       <button>Post</button>
     </form>
     <div class="comment__container-wrapper">

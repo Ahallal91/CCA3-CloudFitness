@@ -22,7 +22,6 @@ def getExercise():
 
 @home_bp.route('/', methods=["GET", "POST"])
 def home():
-    #quote = getRandomQuote()
-    quote = {'q': 'test quote', 'a': 'test author'}
+    quote = getRandomQuote()
     exercise = getExercise()
     return render_template("home.html", quote=quote, exercise=exercise)

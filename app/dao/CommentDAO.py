@@ -6,10 +6,10 @@ from boto3.dynamodb.conditions import Key
 class CommentDAO:
     table = boto3.resource('dynamodb', region_name='ap-southeast-2').Table('comments')
 
-    def create_comment(self, exercise_type, email, comment):
+    def create_comment(self, exercise_type, exercise_name, email, comment):
         response = self.table.put_item(
             Item={
-                'type': exercise_type,
+                'type': exercise_type+exercise_name,
                 'email': email,
                 'comments': [
                     {
@@ -22,10 +22,10 @@ class CommentDAO:
 
         return response
 
-    def update_comment(self, exercise_type, email, comment):
+    def update_comment(self, exercise_type, exercise_name, email, comment):
         response = self.table.update_item(
             Key={
-                'type': exercise_type,
+                'type': exercise_type+exercise_name,
                 'email': email
             },
             UpdateExpression="SET comments = list_append(comments, :c)",
@@ -38,28 +38,30 @@ class CommentDAO:
 
         return response
     
-    def upload_comment(self, exercise_type, email, comment):
+    def upload_comment(self, exercise_type, exercise_name, email, comment):
         # check if the user already made a comment on that exercise
         exercise_type = str(exercise_type)
+        exercise_name = str(exercise_name)
         email = str(email)
 
         response = self.table.query(
-            KeyConditionExpression=Key('type').eq(exercise_type) & Key('email').eq(email)
+            KeyConditionExpression= Key('type').eq(exercise_type+exercise_name) &
+                                    Key('email').eq(email) 
         )
-        print(response)
         if 'Items' in response and len(response['Items']) != 0:
-            self.update_comment(exercise_type, email, comment)
+            self.update_comment(exercise_type, exercise_name, email, comment)
         else:
-            self.create_comment(exercise_type, email, comment)
+            self.create_comment(exercise_type, exercise_name, email, comment)
 
-    def get_comments(self, exercise_type, email=None):
+    def get_comments(self, exercise_type, exercise_name, email=None):
         if email is None:
             response = self.table.query(
-                KeyConditionExpression=Key('type').eq(exercise_type)
+                KeyConditionExpression=Key('type').eq(exercise_type+exercise_name)
             )
         else:
             response = self.table.query(
-                KeyConditionExpression=Key('type').eq(exercise_type) & Key('email').eq(email)
+                KeyConditionExpression= Key('type').eq(exercise_type+exercise_name) &
+                                        Key('email').eq(email) 
             )
 
         return response['Items']

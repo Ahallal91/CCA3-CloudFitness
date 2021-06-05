@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, flash
 import app.dao.ExerciseDAO as ExerciseDAO
 from ..dao.CommentDAO import CommentDAO as CommentDAO
 
@@ -20,13 +20,15 @@ def exercise_page(exercise_type, name):
     # post comment
     if request.method =='POST' and "message" in request.form:
         comment = request.form['message']
-        if comment is not None:
-            commentDAO.upload_comment(exercise_type, session['email'], comment)
+        if (len(comment) != 0 and 'email' in session):
+            commentDAO.upload_comment(exercise_type, name, session['email'], comment)
+        else:
+            flash('Please login to post a comment')
     # post like
     if request.method == 'POST' and "like" in request.form:
         like = request.form['like']
         if like is not None:
             ExerciseDAO.update_exercise(exercise_type, name, None, "like")
 
-    comments = commentDAO.get_comments(exercise_type)
+    comments = commentDAO.get_comments(exercise_type, name)
     return render_template("exercise.html", exercise=exercise, comments=comments)
