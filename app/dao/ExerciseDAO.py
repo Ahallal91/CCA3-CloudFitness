@@ -2,14 +2,16 @@ import boto3
 from decimal import Decimal
 from datetime import datetime
 
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, Attr, Or
 
+from functools import reduce
 
 def format_tags(tags):
     return tags.split(',')
 
 
-def upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name, level, muscle_groups, description, video_url, image_url, admin_approved):
+def upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name, search,
+                    level, muscle_groups, description, video_url, image_url, admin_approved):
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('exercise')
     response = table.put_item(
@@ -18,6 +20,7 @@ def upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name,
             'formatted_type': formatted_exercise_type,  # original type as selected, e.g. "Compound", "Body weight"
             'name': sort_name,  # stripped name used as sort key, e.g. "romanian-deadlift"
             'formatted_name': formatted_name,  # original name user entered, e.g. "Romanian deadlift"
+            'search': search,  # duplicate of name to enable searching of attributes
             'level': level,  # difficulty level, e.g. beginner, intermediate, etc.
             'muscle_groups': muscle_groups,  # list of muscle groups, e.g. neck, triceps, biceps, etc.
             'description': description,  # user-given description of that exercise
@@ -73,3 +76,14 @@ def get_exercise(exercise_type, name, dynamodb=None):
     )
 
     return response['Items']
+
+
+def search_by_query(query, dynamodb=None):
+    if not dynamodb:
+        dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+
+    split_query = query.split(' ')
+    table = dynamodb.Table("exercise")
+    response = table.scan(
+        FilterExpression=reduce(Or, [(Attr("search").contains(value)) for value in split_query]))
+    return response["Items"]
