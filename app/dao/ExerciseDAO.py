@@ -9,13 +9,15 @@ def format_tags(tags):
     return tags.split(',')
 
 
-def upload_exercise(name, exercise_type, level, muscle_groups, description, video_url, image_url, admin_approved):
+def upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name, level, muscle_groups, description, video_url, image_url, admin_approved):
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('exercise')
     response = table.put_item(
         Item={
-            'name': name,  # name of the exercise, e.g. "squat"
-            'type': exercise_type,  # type of exercise, e.g. compound, body weight, etc
+            'type': partition_exercise_type,  # type of exercise, e.g. compound, body-weight, etc.
+            'formatted_type': formatted_exercise_type,  # original type as selected, e.g. "Compound", "Body weight"
+            'name': sort_name,  # stripped name used as sort key, e.g. "romanian-deadlift"
+            'formatted_name': formatted_name,  # original name user entered, e.g. "Romanian deadlift"
             'level': level,  # difficulty level, e.g. beginner, intermediate, etc.
             'muscle_groups': muscle_groups,  # list of muscle groups, e.g. neck, triceps, biceps, etc.
             'description': description,  # user-given description of that exercise
@@ -29,6 +31,7 @@ def upload_exercise(name, exercise_type, level, muscle_groups, description, vide
     )
 
     return response
+
 
 def update_exercise(exercise_type, name, views=None, likes=None):
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
@@ -57,6 +60,7 @@ def update_exercise(exercise_type, name, views=None, likes=None):
     )
 
     return response
+
 
 def get_exercise(exercise_type, name, dynamodb=None):
     if not dynamodb:
