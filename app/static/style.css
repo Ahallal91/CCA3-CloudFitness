@@ -300,3 +300,57 @@
 .exercise__container-date {
   color: var(--gray600);
 }
+
+/* #############################
+    search/search.html
+################################
+*/
+
+.search__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.search__container {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  text-decoration: none;
+  color: var(--gray800);
+  margin: 1rem 0;
+  background: var(--gray200);
+}
+.search__container:hover {
+  color: var(--gray800);
+  background: var(--gray300);
+}
+@media only screen and (max-width: 1000px) {
+  .search__container {
+    flex-wrap: wrap;
+  }
+}
+
+.search__container-image {
+  width: 200px;
+}
+.search__container-body {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.search__container-title {
+  width: 100%;
+}
+.search__container-title h5 {
+  margin: 0 !important;
+}
+.search__container-title span {
+  font-size: 0.8rem;
+  color: var(--gray700);
+}
+.search__container-tags {
+  width: 100%;
+}

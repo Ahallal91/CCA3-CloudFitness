@@ -1,30 +1,34 @@
 {% extends "layout.html" %} {% block content %}
 
-<div class="container p-4">
-{% for exercise in list_of_exercises %}
-<div class="card mb-2">
-<div class="row no-gutters">
-    <div class="col-md-2">
-{#        <div style="background: url({{ exercise["image_url"] }}) 50% 50% no-repeat; width: 300px; height: 300px;"></div>#}
-        <img src="{{ exercise["image_url"] }}" style="object-fit: cover; width: 200px; height: 200px;">
+<div class="container p-4 search__wrapper">
+  {% for exercise in list_of_exercises %}
+  <a class="search__container" href="/exercise/{{ exercise['type'] }}/{{ exercise['name'] }}">
+    <div class="search__container-image">
+      <img
+        src="{{ exercise['image_url'] }}"
+        style="object-fit: cover; width: 200px; height: 200px"
+      />
     </div>
-<div class="col md-5">
-    <div class="card-body">
-        <h5 class="card-title"><a href="/exercise/{{ exercise['type'] }}/{{ exercise['name'] }}">{{ exercise["formatted_name"] }}</a></h5>
+    <div class="search__container-body">
+      <div class="search__container-title">
+        <h5 class="card-title">{{ exercise["formatted_name"] }}</h5>
+        <span>Views: {{ exercise["views"] }}</span>
         <p class="card-text">{{ exercise["description"] }}</p>
+      </div>
+      <div class="search__container-tags">
         <p class="card-text">
-            <small class="text-muted">
-                <em>Muscles worked:</em>
-                {% for muscle_group in exercise["muscle_groups"] %}
-                    {{ muscle_group }}
-                {% endfor %}
-            </small>
+          <span class="text-muted">
+            <span>Muscles worked:</span>
+            <i>
+              {% for muscle_group in exercise["muscle_groups"] %} {{ muscle_group }}, {% endfor
+              %}</i
+            >
+          </span>
         </p>
+      </div>
     </div>
-</div>
-</div>
-</div>
-{% endfor %}
+  </a>
+  {% endfor %}
 </div>
 
 {% endblock content %}
