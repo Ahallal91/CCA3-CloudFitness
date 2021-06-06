@@ -5,7 +5,11 @@ class Management:
     key = os.environ["API_GATEWAY_KEY"]
     
     def get_exercise_by_approval(self, approval):
-        response = requests.get(f'{self.api}/?approval={approval}')
+
+        if approval == True:
+            response = requests.get(f'{self.api}/approved')
+        else:
+            response = requests.get(f'{self.api}/pending')
         return response.json()
         
     
