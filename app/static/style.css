@@ -106,11 +106,13 @@
   flex-wrap: wrap;
 }
 .card__container-card {
-  width: 40%;
+  width: 30%;
   text-decoration: none;
   background: var(--blue100);
   display: flex;
   flex-wrap: wrap;
+  position: relative;
+  margin: 1rem 0;
 }
 .card__container-card-image {
   height: 10rem;
@@ -118,6 +120,7 @@
   object-fit: cover;
 }
 .card__container-card-body {
+  min-height: 5rem;
   padding: 0.5rem 1rem;
   display: flex;
   width: 100%;
@@ -145,6 +148,13 @@
 }
 .card__container-card-date {
   color: var(--gray600);
+  padding: 0 0.2rem;
+  word-break: break-all;
+}
+.card__container-card-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 /* #############################
@@ -353,4 +363,24 @@
 }
 .search__container-tags {
   width: 100%;
+}
+/* #############################
+    profile/profile.html
+################################
+*/
+
+.profile__container {
+  width: 100%;
+  display: flex;
+  margin: 2rem 0;
+}
+
+.card__container-top-items {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.card-private {
+  background: var(--blue300);
 }

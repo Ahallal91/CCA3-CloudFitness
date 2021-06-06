@@ -8,4 +8,6 @@ profile_bp = Blueprint(
 
 @profile_bp.route('/profile', methods=["GET", "POST"])
 def profile():
-    return render_template("profile.html")
+    exercise = {}
+    item = {"private": True}
+    return render_template("profile.html", exercise=exercise, item=item)

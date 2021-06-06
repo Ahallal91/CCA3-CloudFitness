@@ -29,7 +29,7 @@
         <i class="bi bi-hand-thumbs-up-fill"></i>
       </button>
     </form>
-
+    {{% if session['email'] %}} {{% endif %}}
     <p>{{ exercise['description'] }}</p>
   </div>
 
