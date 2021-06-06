@@ -46,3 +46,10 @@ class ProfilePersonalDAO:
         )
 
         return response['Items']
+    
+    def get_exercise(self, type, name, email):
+        response = self.table.query(
+            KeyConditionExpression=Key('email').eq(email) & Key('exercise').eq(type+name)
+        )
+
+        return response['Items']

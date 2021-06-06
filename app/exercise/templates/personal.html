@@ -1,0 +1,27 @@
+{% extends "layout.html" %} {% block content %}
+<div class="w-60 p-4 container">
+  <div class="exercise__container">
+    <div class="video-container">
+      <iframe
+        class="video"
+        src="{{ exercises['video_url'] }}"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <h3>{{ exercises['formatted_name'] }}</h3>
+    <span class="exercise__container-author">{{ exercises['email']}} </span>
+    <div class="exercise__container-body">
+      <div class="exercise__container-data">
+        <span class="exercise__container-data-date"
+          >Upload Date: {{ exercises['upload_date'] }}</span
+        >
+      </div>
+    </div>
+    <p>{{ exercises['description'] }}</p>
+  </div>
+</div>
+{% endblock content %}

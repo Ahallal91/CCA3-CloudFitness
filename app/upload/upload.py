@@ -63,7 +63,6 @@ def upload():
             bucket = "elasticbeanstalk-ap-southeast-2-059411200951"
             image_name = storageDAO.upload_exercise_image(image, bucket)
             image_url = storageDAO.get_url_for(bucket, "ap-southeast-2", "image_uploads/", image_name)
-            print(location)
             if location == exercise_location[1]:
                 exerciseDAO.upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name,
                                             search, level, muscles, description, video_url, image_url, False)

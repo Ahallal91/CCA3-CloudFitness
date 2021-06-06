@@ -5,11 +5,9 @@
   </div>
 
   <div class="profile__container-exercises">
-    {% for exercise in exercises %}
-    <a href="" class="card__container-card">
+    {% for exercise in exercises['existing'] %}
+    <a href="/exercise/{{ exercise['type'] }}/{{ exercise['name'] }}" class="card__container-card">
       <img class="card__container-card-image" src="{{ exercise['image_url'] }}" alt="" />
-
-      {% if 'personal' not in exercise %}
       <div class="card__container-card-body">
         <span class="card__container-card-title">{{ exercise['formatted_name'] }}</span>
         <div class="card__container-card-data">
@@ -24,9 +22,9 @@
         <input type="hidden" id="existing" name="existing" value="existing" />
         <button type="submit" class="btn btn-warning"><i class="bi bi-x-lg"></i></button>
       </form>
-
-      {% else %}
-
+      {% endfor %} {% for exercise in exercises['personal'] %}
+      <a href="/personal/{{ exercise['type'] }}/{{ exercise['name'] }}" class="card__container-card">
+        <img class="card__container-card-image" src="{{ exercise['image_url'] }}" alt="" />
       <div class="card__container-card-body card-private">
         <span class="card__container-card-title">{{ exercise['formatted_name'] }}</span>
         <div class="card__container-card-data">
@@ -40,7 +38,6 @@
         <input type="hidden" id="personal" name="personal" value="personal" />
         <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
       </form>
-      {% endif %}
     </a>
     {% endfor %}
   </div>
