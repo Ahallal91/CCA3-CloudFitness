@@ -22,6 +22,9 @@
         >
       </div>
     </div>
+    <a href="/exercise/add/{{ exercise['type'] }}/{{ exercise['name'] }}"
+      >{% if session['email'] %} <i class="bi bi-plus-lg"> Add To Profile</i> {% endif %}</a
+    >
     <form method="POST" action="/exercise/{{ exercise['type'] }}/{{ exercise['name'] }}">
       <span>Like</span>
       <input type="hidden" id="like" name="like" value="like" />
@@ -29,7 +32,6 @@
         <i class="bi bi-hand-thumbs-up-fill"></i>
       </button>
     </form>
-    {{% if session['email'] %}} {{% endif %}}
     <p>{{ exercise['description'] }}</p>
   </div>
 

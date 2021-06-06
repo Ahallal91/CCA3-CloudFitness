@@ -2,11 +2,11 @@ import boto3
 from botocore.exceptions import ClientError
 
 
-def create_table(dynamodb=None):
+def create_table(name, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-2")
 
-    table_name = 'profile'
+    table_name = name
 
     dynamodb = boto3.resource('dynamodb')
     try:
@@ -14,7 +14,7 @@ def create_table(dynamodb=None):
             TableName=table_name,
             KeySchema=[
                 {
-                    'AttributeName': 'type',
+                    'AttributeName': 'exercise',
                     'KeyType': 'HASH'
                 },
                 {
@@ -24,7 +24,7 @@ def create_table(dynamodb=None):
             ],
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'type',
+                    'AttributeName': 'exercise',
                     'AttributeType': 'S'
                 },
                 {
@@ -49,8 +49,13 @@ def create_table(dynamodb=None):
 
 
 if __name__ == '__main__':
-    profile_table = create_table()
-    if profile_table is None:
+    profile_existing_table = create_table('profile-existing')
+    profile_personal_table = create_table('profile-personal')
+    if profile_existing_table is None:
         print('Table exists')
     else:
-        print("Table status:", profile_table.table_status)
+        print("Table status:", profile_existing_table.table_status)
+    if profile_personal_table is None:
+        print('Table exists')
+    else:
+        print("Table status:", profile_personal_table.table_status)

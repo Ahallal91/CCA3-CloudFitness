@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, session, flash
-import app.dao.ExerciseDAO as ExerciseDAO
+from ..dao.ExerciseDAO import ExerciseDAO as ExerciseDAO
 from ..dao.CommentDAO import CommentDAO as CommentDAO
+from ..dao.ProfileExistingDAO import ProfileExistingDAO as ProfileExistingDAO
 
 exercise_bp = Blueprint(
     'exercise_bp', __name__,
@@ -8,15 +9,21 @@ exercise_bp = Blueprint(
     static_folder='static'
 )
 
+exerciseDAO = ExerciseDAO()
 commentDAO = CommentDAO()
+profileExistingDAO = ProfileExistingDAO()
 
-@exercise_bp.route('/exercise/<string:exercise_type>/<string:name>', methods=["GET", "POST"])
-def exercise_page(exercise_type, name):
-    exercise = ExerciseDAO.get_exercise(exercise_type, name)
-    # update view count
-    ExerciseDAO.update_exercise(exercise_type, name, "view", None)
+@exercise_bp.route('/exercise/<string:exercise_type>/<string:name>', defaults={'add': None}, methods=["GET", "POST"])
+@exercise_bp.route('/exercise/<string:add>/<string:exercise_type>/<string:name>', methods=["GET", "POST"])
+def exercise_page(exercise_type, name, add):
+    exercise = exerciseDAO.get_exercise(exercise_type, name)
     if len(exercise) != 0:
         exercise = exercise[0]
+    # update view count
+    if add is None:
+        exerciseDAO.update_exercise(exercise_type, name, "view", None)
+    if add is not None and 'email' in session:
+        print("")
     # post comment
     if request.method =='POST' and "message" in request.form:
         comment = request.form['message']
@@ -29,6 +36,6 @@ def exercise_page(exercise_type, name):
         like = request.form['like']
         if like is not None:
             ExerciseDAO.update_exercise(exercise_type, name, None, "like")
-
+    print(exercise)
     comments = commentDAO.get_comments(exercise_type, name)
     return render_template("exercise.html", exercise=exercise, comments=comments)
