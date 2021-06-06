@@ -11,8 +11,8 @@ class ProfilePersonalDAO:
                         
         response = self.table.put_item(
             Item={
-                'exercise': partition_exercise_type + sort_name,  # type of exercise, e.g. compound, body-weight, etc.
                 'email': email, # user email
+                'exercise': partition_exercise_type + sort_name,  # type of exercise, e.g. compound, body-weight, etc.
                 'type': partition_exercise_type,
                 'formatted_type': formatted_exercise_type,  # original type as selected, e.g. "Compound", "Body weight"
                 'name': sort_name,  # stripped name used as sort key, e.g. "romanian-deadlift"
@@ -24,6 +24,7 @@ class ProfilePersonalDAO:
                 'video_url': video_url,  # video url
                 'image_url': image_url,
                 'upload_date': str(datetime.now()),  # upload date in the format YYYY-MM-DD HH:MM:SS.MS
+                'personal': True
             }
         )
 
@@ -32,8 +33,16 @@ class ProfilePersonalDAO:
     def remove_exercise(self, type, name, email):
         response = self.table.delete_item(
             Key={
-                'type': type+name, 
-                'email': email 
+                'email': email,
+                'exercise': type+name
+
             })
 
         return response
+
+    def get_exercises(self, email):
+        response = self.table.query(
+            KeyConditionExpression=Key('email').eq(email)
+        )
+
+        return response['Items']

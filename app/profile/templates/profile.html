@@ -5,42 +5,44 @@
   </div>
 
   <div class="profile__container-exercises">
-    <!-- Loop -->
+    {% for exercise in exercises %}
     <a href="" class="card__container-card">
-      <img class="card__container-card-image" src="https://source.unsplash.com/random" alt="" />
+      <img class="card__container-card-image" src="{{ exercise['image_url'] }}" alt="" />
 
-      {% if 'private' not in item %}
+      {% if 'personal' not in exercise %}
       <div class="card__container-card-body">
-        <span class="card__container-card-title">{{ "item['formatted_name']" }}</span>
+        <span class="card__container-card-title">{{ exercise['formatted_name'] }}</span>
         <div class="card__container-card-data">
-          <span class="card__container-card-views">{{ "item['views']" }}</span>
-          <span class="card__container-card-date">Upload Date: {{ "item['upload_date']" }}</span>
+          <span class="card__container-card-views">{{ exercise['views'] }}</span>
+          <span class="card__container-card-date">Upload Date: {{ exercise['upload_date'] }}</span>
         </div>
       </div>
 
       <form action="/profile" method="POST" class="card__container-card-delete">
-        <input type="hidden" id="type" name="type" value=/>
+        <input type="hidden" id="type" name="type" value="{{ exercise['type'] }}" />
+        <input type="hidden" id="name" name="name" value="{{ exercise['name'] }}" />
+        <input type="hidden" id="existing" name="existing" value="existing" />
         <button type="submit" class="btn btn-warning"><i class="bi bi-x-lg"></i></button>
       </form>
 
       {% else %}
 
       <div class="card__container-card-body card-private">
-        <span class="card__container-card-title">{{ "item['formatted_name']" }}</span>
+        <span class="card__container-card-title">{{ exercise['formatted_name'] }}</span>
         <div class="card__container-card-data">
-          <span class="card__container-card-views">{{ "item['views']" }}</span>
-          <span class="card__container-card-date">Upload Date: {{ "item['upload_date']" }}</span>
+          <span class="card__container-card-date">Upload Date: {{ exercise['upload_date'] }}</span>
         </div>
       </div>
 
       <form action="/profile" method="POST" class="card__container-card-delete">
-        <input type="hidden" id="type" name="type" value=/>
+        <input type="hidden" id="type" name="type" value="{{ exercise['type'] }}" />
+        <input type="hidden" id="name" name="name" value="{{ exercise['name'] }}" />
+        <input type="hidden" id="personal" name="personal" value="personal" />
         <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
       </form>
-
       {% endif %}
     </a>
-    <!-- end loop -->
+    {% endfor %}
   </div>
 </div>
 {% endblock content %}

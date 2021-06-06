@@ -23,7 +23,7 @@ def exercise_page(exercise_type, name, add):
     if add is None:
         exerciseDAO.update_exercise(exercise_type, name, "view", None)
     if add is not None and 'email' in session:
-        print("")
+        profileExistingDAO.add_existing_exercise(exercise_type, name, session['email'])
     # post comment
     if request.method =='POST' and "message" in request.form:
         comment = request.form['message']
@@ -35,7 +35,7 @@ def exercise_page(exercise_type, name, add):
     if request.method == 'POST' and "like" in request.form:
         like = request.form['like']
         if like is not None:
-            ExerciseDAO.update_exercise(exercise_type, name, None, "like")
-    print(exercise)
+            exerciseDAO.update_exercise(exercise_type, name, None, "like")
+            
     comments = commentDAO.get_comments(exercise_type, name)
     return render_template("exercise.html", exercise=exercise, comments=comments)

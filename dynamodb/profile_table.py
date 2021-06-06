@@ -14,21 +14,21 @@ def create_table(name, dynamodb=None):
             TableName=table_name,
             KeySchema=[
                 {
-                    'AttributeName': 'exercise',
+                    'AttributeName': 'email',
                     'KeyType': 'HASH'
                 },
                 {
-                    'AttributeName': 'email',
+                    'AttributeName': 'exercise',
                     'KeyType': 'RANGE'
                 }
             ],
             AttributeDefinitions=[
                 {
-                    'AttributeName': 'exercise',
+                    'AttributeName': 'email',
                     'AttributeType': 'S'
                 },
                 {
-                    'AttributeName': 'email',
+                    'AttributeName': 'exercise',
                     'AttributeType': 'S'
                 }
             ],

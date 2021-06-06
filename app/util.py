@@ -35,3 +35,7 @@ def get_exercise_types():
             "Machine",
             "Bodyweight",
             "Cardio"]
+
+def get_exercise_upload_type():
+    return ["Personal Page", 
+            "Upload To Website"]

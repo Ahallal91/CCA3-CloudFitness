@@ -9,8 +9,8 @@ class ProfileExistingDAO:
 
         response = self.table.put_item(
         Item={
-            'exercise': type+name, 
             'email': email, 
+            'exercise': type+name, 
             'exercise-type': type,
             'exercise-name': name
         }
@@ -21,8 +21,15 @@ class ProfileExistingDAO:
     def remove_existing_exercise(self, type, name, email):
         response = self.table.delete_item(
             Key={
-                'exercise': type+name, 
-                'email': email 
+                'email': email,
+                'exercise': type+name
             })
 
         return response
+
+    def get_existing_exercises(self, email):
+        response = self.table.query(
+            KeyConditionExpression=Key('email').eq(email)
+        )
+
+        return response['Items']

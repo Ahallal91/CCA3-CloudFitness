@@ -53,6 +53,14 @@
       <label class="form-label">Exercise Image (optional)</label>
       <input type="file" name="file" class="form-control" id="file" required />
     </div>
+    <div class="mb-3">
+      <label class="form-label">Upload To Personal Profile or Website</label>
+      <select id="exercise-location" name="exercise-location" class="form-select">
+        {% for location in exercise_location %}
+        <option value="{{ location }}">{{ location }}</option>
+        {% endfor %}
+      </select>
+    </div>
     <div class="mb-3 mt-3">
       <button type="submit" class="btn btn-primary mb-3">Upload</button>
     </div>

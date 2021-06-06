@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, session, url_for, request, flash, redirect
 
 import app.util as util
-import app.dao.ExerciseDAO as ExerciseDAO
-import app.dao.StorageDAO as StorageDAO
+from ..dao.ExerciseDAO import ExerciseDAO as ExerciseDAO
+from ..dao.ProfilePersonalDAO import ProfilePersonalDAO as ProfilePersonalDAO
+from ..dao.StorageDAO import StorageDAO as StorageDAO
 
 from app.exceptions.exceptions import ImageUploadFailed
 from app.exceptions.exceptions import ExerciseUploadFailed
@@ -14,6 +15,9 @@ upload_bp = Blueprint(
     static_folder='static'
 )
 
+exerciseDAO = ExerciseDAO()
+storageDAO = StorageDAO()
+profilePersonalDAO = ProfilePersonalDAO()
 
 def parse_name(string):
     """Keep only characters and spaces, replace spaces with dashes"""
@@ -29,6 +33,7 @@ def upload():
     exercise_level = util.get_exercise_levels()
     muscle_groups = util.get_muscle_groups()
     exercise_types = util.get_exercise_types()
+    exercise_location = util.get_exercise_upload_type()
 
     if request.method == 'POST':
         # keep original copies of the exercise type and name for display
@@ -52,13 +57,26 @@ def upload():
         muscles = request.form.getlist('muscles')
         description = request.form['description']
         image = request.files['file']
+        location = request.form['exercise-location']
 
         try:
             bucket = "elasticbeanstalk-ap-southeast-2-059411200951"
-            image_name = StorageDAO.upload_exercise_image(image, bucket)
-            image_url = StorageDAO.get_url_for(bucket, "ap-southeast-2", "image_uploads/", image_name)
-            ExerciseDAO.upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name,
-                                        search, level, muscles, description, video_url, image_url, False)
+            image_name = storageDAO.upload_exercise_image(image, bucket)
+            image_url = storageDAO.get_url_for(bucket, "ap-southeast-2", "image_uploads/", image_name)
+            print(location)
+            if location == exercise_location[1]:
+                exerciseDAO.upload_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name,
+                                            search, level, muscles, description, video_url, image_url, False)
+            elif 'email' in session and location == exercise_location[0]:
+                profilePersonalDAO.add_exercise(partition_exercise_type, formatted_exercise_type, sort_name, formatted_name,
+                                                search, level, muscle_groups, description, video_url, image_url, session['email'])
+            else:
+                flash('Please sign in to upload to your profile')
+                return render_template("upload.html",
+                        exercise_level=exercise_level,
+                        muscle_groups=muscle_groups,
+                        exercise_types=exercise_types,
+                        exercise_location=exercise_location)
             flash(f'Exercise uploaded successfully!')
         except (ImageUploadFailed, ExerciseUploadFailed) as e:
             flash(f'{e.message}')
@@ -66,4 +84,5 @@ def upload():
     return render_template("upload.html",
                            exercise_level=exercise_level,
                            muscle_groups=muscle_groups,
-                           exercise_types=exercise_types)
+                           exercise_types=exercise_types,
+                           exercise_location=exercise_location)
