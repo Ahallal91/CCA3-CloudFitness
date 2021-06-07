@@ -18,7 +18,7 @@ profilePersonalDAO = ProfilePersonalDAO()
 @exercise_bp.route('/exercise/<string:exercise_type>/<string:name>', defaults={'add': None}, methods=["GET", "POST"])
 @exercise_bp.route('/exercise/<string:add>/<string:exercise_type>/<string:name>', methods=["GET", "POST"])
 def exercise_page(exercise_type, name, add):
-    exercise = exerciseDAO.get_exercise(exercise_type, name)
+    exercise = exerciseDAO.get_approved_exercises(exercise_type, name)
     if len(exercise) != 0:
         exercise = exercise[0]
     # update view count

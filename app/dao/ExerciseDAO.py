@@ -72,6 +72,33 @@ class ExerciseDAO:
 
         return response['Items']
 
+    def get_approved_exercises(self, exercise_type, name):
+        if exercise_type is None or name is None:
+            filter = Key('approved').eq(True)
+        else:
+            filter = Key('type').eq(exercise_type) & Key('name').eq(name) & Key('approved').eq(True)
+        scan_kwargs = {
+            'FilterExpression': filter,
+            'ProjectionExpression': "#t, #n, formatted_name, formatted_type, #s, approved, description, image_url, #lvl, likes, muscle_groups, upload_date, video_url, #v",
+            'ExpressionAttributeNames': {"#t": "type", "#n": "name", "#lvl": "level", "#v": "views", "#s": "search"}
+        }
+
+        done = False
+        start_key = None
+        while not done:
+            if start_key:
+                scan_kwargs['ExclusiveStartKey'] = start_key
+            response = self.table.scan(**scan_kwargs)
+            display_exercises = (response.get('Items', []))
+            start_key = response.get('LastEvaluatedKey', None)
+            done = start_key is None
+
+        if 'Items' in response:
+            items = display_exercises
+        else:
+            items = "Not Found"
+
+        return display_exercises
 
     def search_by_query(self, query):
         split_query = query.split(' ')

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 import requests
 from app.util import create_table_resource
+from ..dao.ExerciseDAO import ExerciseDAO as ExerciseDAO
 
 home_bp = Blueprint(
     'home_bp', __name__,
@@ -8,20 +9,15 @@ home_bp = Blueprint(
     static_folder='static'
 )
 
+exerciseDAO = ExerciseDAO()
 
 def getRandomQuote():
     response = requests.get('https://zenquotes.io/api/random')
     return response.json()[0]
 
-
-def getExercise():
-    table = create_table_resource('exercise')
-    response = table.scan()
-    return response['Items']
-
-
 @home_bp.route('/', methods=["GET", "POST"])
 def home():
     quote = getRandomQuote()
-    exercise = getExercise()
+    exercise = exerciseDAO.get_approved_exercises(None, None)
+    print(exercise)
     return render_template("home.html", quote=quote, exercise=exercise)
