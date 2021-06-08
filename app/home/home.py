@@ -18,6 +18,5 @@ def getRandomQuote():
 @home_bp.route('/', methods=["GET", "POST"])
 def home():
     quote = getRandomQuote()
-    exercise = exerciseDAO.get_approved_exercises(None, None)
-    print(exercise)
+    exercise = exerciseDAO.get_approved_exercises()
     return render_template("home.html", quote=quote, exercise=exercise)
