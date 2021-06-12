@@ -15,6 +15,10 @@ def search():
 
     list_of_exercises = exerciseDAO.search_by_query(query)
 
+    for exercise in list_of_exercises:
+        if not exercise["approved"]:
+            list_of_exercises.remove(exercise)
+
     if not list_of_exercises:
         flash("No results")
 
