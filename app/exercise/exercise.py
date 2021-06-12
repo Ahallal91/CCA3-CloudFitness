@@ -33,6 +33,7 @@ def exercise_page(exercise_type, name, add):
             commentDAO.upload_comment(exercise_type, name, session['email'], comment)
         else:
             flash('Please login to post a comment')
+            return redirect(url_for('login_bp.login'))
     # post like
     if request.method == 'POST' and "like" in request.form:
         like = request.form['like']

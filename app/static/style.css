@@ -376,6 +376,10 @@
   margin: 2rem 0;
 }
 
+.profile__container-exercises {
+  display: flex;
+}
+
 .card__container-top-items {
   display: flex;
   flex-wrap: nowrap;
