@@ -12,24 +12,24 @@ CloudFitness is a web application that is designed to help users quickly find ex
 CloudFitness is made up of three separate applications which all provide specific functionalities.
 
 ## Functionality of Main User Application
-• Users can search exercises by their names
-• Allow users to view exercise view and like counts
-• Allow users to comment on exercises
-• Users can add exercises to their profiles
-• Users can submit their own exercises via upload functionality, these must be approved before being published, or upload personal exercises to their profile.
+. Users can search exercises by their names
+. Allow users to view exercise view and like counts
+. Allow users to comment on exercises
+. Users can add exercises to their profiles
+. Users can submit their own exercises via upload functionality, these must be approved before being published, or upload personal exercises to their profile.
 
 ## Functionality of Admin Application
 
-• Load exercises from API Gateway
-• Edit exercises on API Gateway
-• Set approved exercises to pending
-• Set pending exercises to approved
-• View all exercises available from API gateway
+. Load exercises from API Gateway
+. Edit exercises on API Gateway
+. Set approved exercises to pending
+. Set pending exercises to approved
+. View all exercises available from API gateway
 
 ## REST API
 
-• Get all exercises in the database
-• Get exercises by type and name
-• Get exercises by approved status
-• Update exercise approved status (this requires an API key)
+. Get all exercises in the database
+. Get exercises by type and name
+. Get exercises by approved status
+. Update exercise approved status (this requires an API key)
 
